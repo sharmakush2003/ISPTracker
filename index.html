@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISP Tracker - CSS Enhanced</title>
+    <!-- Feature 4: Using a modern Variable Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+    <style>
+        /* Feature 1: System-Aware Dark/Light Modes & Custom Properties */
+        :root {
+            --bg-color: #f8fafc;
+            --primary-color: #6a5af9;
+            --primary-hover: #5a4af7;
+            --secondary-color: #9d8eee;
+            --text-dark: #1e293b;
+            --text-light: #6c757d;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --shadow: 0 10px 30px -15px rgba(50, 50, 93, 0.1), 0 3px 6px -3px rgba(0, 0, 0, 0.08);
+            --font-family: 'Inter', 'Poppins', sans-serif;
+            --focus-glow: 0 0 0 3px rgba(106, 90, 249, 0.4);
+            --bg-noise: url('data:image/svg+xml,%3Csvg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency=".45" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%" height="100%" filter="url(%23noise)"/%3E%3C/svg%3E');
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --card-bg: #1f2937;
+                --primary-color: #818cf8;
+                --primary-hover: #a5b4fc;
+                --secondary-color: #a78bfa;
+                --text-dark: #f9fafb;
+                --text-light: #9ca3af;
+                --border-color: #374151;
+                --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                --focus-glow: 0 0 0 3px rgba(129, 140, 248, 0.4);
+            }
+        }
+        
+        body.dark-mode {
+             --bg-color: #111827; --card-bg: #1f2937; --primary-color: #818cf8; --primary-hover: #a5b4fc;
+             --secondary-color: #a78bfa; --text-dark: #f9fafb; --text-light: #9ca3af; --border-color: #374151;
+             --focus-glow: 0 0 0 3px rgba(129, 140, 248, 0.4);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        main { max-width: 1200px; margin: 2rem auto; padding: 1rem; }
+
+        h1, h2 { text-align: center; }
+        
+        /* Feature 6: Responsive Typography with clamp() */
+        h1 {
+            font-weight: 700;
+            font-size: clamp(2rem, 1rem + 3vw, 2.8rem);
+            /* Feature 7: Gradient Text Clipping */
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        h2 { color: var(--text-dark); font-weight: 600; margin-top: 0; }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem; margin-bottom: 2rem;
+            /* Feature 3: Parent perspective for 3D hover effects */
+            perspective: 1000px;
+        }
+
+        /* Feature 5: Sophisticated Keyframe Animations */
+        @keyframes subtle-pop-in {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white; padding: 1.5rem; border-radius: 12px; text-align: center;
+            opacity: 0;
+            animation: subtle-pop-in 0.5s ease-out forwards;
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        /* Part of Feature 3: 3D hover effect */
+        .stat-card:hover {
+            transform: translateY(-8px) translateZ(30px) rotateX(5deg);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card h3 { margin: 0 0 0.5rem 0; font-size: 1.1rem; opacity: 0.9; }
+        .stat-card .stat-number { font-size: 2.5rem; font-weight: 700; }
+        .family-cost-stat .stat-number { font-size: 1.8rem; line-height: 1.4; }
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 12px 28px; font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 50px; border: none; color: white; transition: all 0.3s ease; }
+        .btn:hover { transform: translateY(-3px) scale(1.05); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary-color), var(--primary-hover)); box-shadow: 0 8px 25px -8px var(--primary-color); }
+        .btn-action { background: transparent; color: var(--text-light); border-radius: 8px; transition: all 0.2s ease; border: 1px solid transparent; }
+        .btn-action:hover { color: var(--primary-color); background: var(--bg-color); border-color: var(--border-color);}
+
+        /* Feature 2: Enhanced Glassmorphism & Acrylic Form */
+        #formContainer {
+            border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            opacity: 0; transform: translateY(-20px) scale(0.98);
+            max-height: 0; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); margin-top: 1rem;
+        }
+        #formContainer::before { /* Acrylic background texture */
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-color: var(--card-bg);
+            opacity: 0.85;
+            z-index: -2;
+        }
+        #formContainer::after { /* Noise Texture */
+             content: ''; position: absolute; inset: 0;
+             background-image: var(--bg-noise);
+             opacity: 0.02; z-index: -1;
+        }
+        body:not(.dark-mode) #formContainer { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        
+        #formContainer.visible { opacity: 1; transform: translateY(0) scale(1); max-height: 1500px; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+
+        /* Feature 9: Using :has() to alter grid layout when "Other ISP" field is visible */
+        .form-grid:has(.other-isp-group.visible) {
+             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px 15px; border-radius: 8px; font-size: 1rem;
+            background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-dark);
+            transition: all 0.2s;
+        }
+
+        /* Feature 8: Accessible Focus States with :focus-visible */
+        .form-group input:focus-visible, .form-group select:focus-visible, .btn:focus-visible {
+            outline: none;
+            box-shadow: var(--focus-glow);
+        }
+
+        .table-container { 
+            overflow-x: auto;
+            /* Feature 10: Scroll-Driven Animations */
+            animation: subtle-pop-in 0.7s ease both;
+            animation-timeline: view();
+            animation-range-start: 100px;
+            animation-range-end: 400px;
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        thead th { background-color: var(--bg-color); }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        
+        tbody { perspective: 800px; }
+        tbody tr {
+             transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+             /* Part of Feature 4: Transition variable font settings */
+             transition-property: transform, background-color, font-variation-settings;
+        }
+        tbody tr:hover {
+            background-color: var(--card-bg);
+            /* Part of Feature 3: 3D hover on table rows */
+            transform: translateZ(15px);
+            box-shadow: var(--shadow);
+            z-index: 10;
+            position: relative;
+            border-bottom-color: transparent;
+        }
+        /* Part of Feature 4: Animate font weight on hover */
+        tbody tr:hover b {
+            font-variation-settings: 'wght' 600;
+        }
+
+    </style>
+    <!-- Keep original HTML structure -->
+    <!-- ... same HTML body as provided in your prompt ... -->
+    <main>
+        <h1><i class="fa-solid fa-wifi" style="margin-right: 0.5rem; color: var(--secondary-color);"></i>ISP Recharge Tracker</h1>
+        
+        <section class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total Plans</h3><div id="statTotalPlans" class="stat-number">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Plans</h3><div id="statActivePlans" class="stat-number">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Expiring Soon</h3><div id="statExpiringSoon" class="stat-number">0</div>
+            </div>
+             <!-- New: Total Family Expense Card -->
+            <div class="stat-card family-cost-stat">
+                <h3>Family Expense</h3>
+                <div class="stat-number">
+                    <span id="statDailyCost">₹0/day</span>
+                    <span id="statMonthlyCost">₹0/mo</span>
+                </div>
+            </div>
+        </section>
+
+        <div style="text-align: center;">
+            <button id="showFormBtn" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add New Plan</button>
+        </div>
+
+        <section id="formContainer">
+             <h2 id="formTitle">Add New Plan</h2>
+             <form id="planForm">
+                <input type="hidden" id="planId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="ispNameSelect">ISP Name</label>
+                        <select id="ispNameSelect" required>
+                            <option value="Jio">Jio</option> <option value="Airtel">Airtel</option>
+                            <option value="Vi">Vi (Vodafone Idea)</option> <option value="BSNL">BSNL</option> <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div id="otherIspGroup" class="form-group other-isp-group">
+                        <label for="ispNameOther">Provider Name</label>
+                        <input type="text" id="ispNameOther" placeholder="Enter provider name">
+                    </div>
+                     <div class="form-group">
+                        <label for="rechargedOn">Recharged On</label> <input type="date" id="rechargedOn" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="validity">Validity (days)</label> <input type="number" id="validity" required min="1" placeholder="e.g. 84">
+                    </div>
+                     <div class="form-group">
+                        <label for="totalPrice">Total Price (₹)</label> <input type="number" id="totalPrice" required min="0" step="0.01">
+                    </div>
+                     <div class="form-group">
+                        <label for="expiresOn">Recharge Expires On</label> <input type="date" id="expiresOn" disabled>
+                    </div>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" id="cancelBtn" class="btn-action">Cancel</button>
+                    <button type="submit" id="saveBtn" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Plan</button>
+                </div>
+             </form>
+        </section>
+        
+        <section class="card" style="padding-top: 1rem;">
+            <h2>All Plans</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable sorted-asc" data-sort="expiresOn">Expires On</th>
+                            <th class="sortable" data-sort="ispName">ISP Name</th>
+                            <th>Validity</th>
+                            <th class="sortable" data-sort="totalPrice">Total Price</th>
+                            <th>Price/Day</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="planList"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="toastContainer"></div>
+<script>
+    // Unchanged JavaScript from your prompt...
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- State Management and Elements ---
+        const AppState = {
+            plans: JSON.parse(localStorage.getItem('ispRechargePlans_v3.6')) || [], // Versioned key
+            editingPlanId: null,
+            sortConfig: { key: 'expiresOn', direction: 'ascending' },
+            PREDEFINED_ISPS: ['Jio', 'Airtel', 'Vi', 'BSNL'],
+        };
+        const DOMElements = {
+            showFormBtn: document.getElementById('showFormBtn'),
+            formContainer: document.getElementById('formContainer'),
+            planForm: document.getElementById('planForm'),
+            cancelBtn: document.getElementById('cancelBtn'),
+            saveBtn: document.getElementById('saveBtn'),
+            formTitle: document.getElementById('formTitle'),
+            planList: document.getElementById('planList'),
+            toastContainer: document.getElementById('toastContainer'),
+            ispNameSelect: document.getElementById('ispNameSelect'),
+            otherIspGroup: document.getElementById('otherIspGroup'),
+            ispNameOther: document.getElementById('ispNameOther'),
+            statTotal: document.getElementById('statTotalPlans'),
+            statActive: document.getElementById('statActivePlans'),
+            statExpiring: document.getElementById('statExpiringSoon'),
+            statDailyCost: document.getElementById('statDailyCost'), // New
+            statMonthlyCost: document.getElementById('statMonthlyCost'), // New
+            planId: document.getElementById('planId'),
+            rechargedOn: document.getElementById('rechargedOn'),
+            expiresOn: document.getElementById('expiresOn'),
+            validity: document.getElementById('validity'),
+            totalPrice: document.getElementById('totalPrice'),
+        };
+
+        // --- Core Functions ---
+        const showToast = (message, type = 'success') => {
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-times-circle';
+            DOMElements.toastContainer.innerHTML += `<div class="toast ${type}"><i class="fa-solid ${icon}"></i>${message}</div>`;
+        };
+        
+        const getPlanExpiryDate = (plan) => {
+            const date = new Date(plan.rechargedOn);
+            date.setDate(date.getDate() + (parseInt(plan.validity) || 0) - 1);
+            return date;
+        }
+
+        const toggleOtherIspField = () => {
+            if (DOMElements.ispNameSelect.value === 'Other') {
+                DOMElements.otherIspGroup.classList.add('visible');
+                DOMElements.ispNameOther.required = true;
+            } else {
+                DOMElements.otherIspGroup.classList.remove('visible');
+                DOMElements.ispNameOther.required = false;
+                DOMElements.ispNameOther.value = '';
+            }
+        };
+
+        const showForm = (isEdit = false, planToEdit = null) => {
+            DOMElements.planForm.reset();
+            if (isEdit) {
+                AppState.editingPlanId = planToEdit.id;
+                DOMElements.formTitle.textContent = 'Edit Plan';
+                DOMElements.saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Update Plan';
+                DOMElements.planId.value = planToEdit.id;
+                if (AppState.PREDEFINED_ISPS.includes(planToEdit.ispName)) {
+                    DOMElements.ispNameSelect.value = planToEdit.ispName;
+                } else {
+                    DOMElements.ispNameSelect.value = 'Other';
+                    DOMElements.ispNameOther.value = planToEdit.ispName;
+                }
+                DOMElements.rechargedOn.value = planToEdit.rechargedOn;
+                DOMElements.validity.value = planToEdit.validity;
+                DOMElements.totalPrice.value = planToEdit.totalPrice;
+            } else {
+                AppState.editingPlanId = null;
+                DOMElements.formTitle.textContent = 'Add New Plan';
+                DOMElements.saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Plan';
+                DOMElements.rechargedOn.valueAsDate = new Date();
+            }
+            toggleOtherIspField();
+            const expiresOnField = DOMElements.planForm.elements.expiresOn;
+            if (DOMElements.rechargedOn.value && DOMElements.validity.value) {
+                expiresOnField.value = getPlanExpiryDate({rechargedOn: DOMElements.rechargedOn.value, validity: DOMElements.validity.value}).toISOString().split('T')[0];
+            }
+            DOMElements.showFormBtn.style.display = 'none';
+            DOMElements.formContainer.classList.add('visible');
+        };
+
+        const hideForm = () => {
+            DOMElements.formContainer.classList.remove('visible');
+            DOMElements.showFormBtn.style.display = 'block';
+        };
+        
+        const handleFormSubmit = e => {
+            e.preventDefault();
+            if (!DOMElements.planForm.checkValidity()) {
+                showToast('Please fix the errors in the form.', 'error');
+                return;
+            }
+
+            const ispName = (DOMElements.ispNameSelect.value === 'Other') ? DOMElements.ispNameOther.value.trim() : DOMElements.ispNameSelect.value;
+            if (!ispName) {
+                showToast('Provider name is required.', 'error');
+                return;
+            }
+            
+            const planData = {
+                id: AppState.editingPlanId || Date.now().toString(),
+                ispName: ispName,
+                rechargedOn: DOMElements.rechargedOn.value,
+                validity: parseInt(DOMElements.validity.value),
+                totalPrice: parseFloat(DOMElements.totalPrice.value),
+            };
+            
+            if (AppState.editingPlanId) {
+                AppState.plans = AppState.plans.map(p => p.id === AppState.editingPlanId ? planData : p);
+                showToast('Plan updated successfully!');
+            } else {
+                AppState.plans.unshift(planData);
+                showToast('Plan added successfully!');
+            }
+            saveAndRender();
+            hideForm();
+        };
+
+        const deletePlan = id => {
+            if (confirm('Are you sure you want to delete this plan?')) {
+                AppState.plans = AppState.plans.filter(p => p.id !== id);
+                saveAndRender();
+                showToast('Plan deleted.', 'error');
+            }
+        };
+
+        const updateDashboard = () => {
+            const now = new Date(); now.setHours(0,0,0,0);
+            const sevenDaysFromNow = new Date(now).setDate(now.getDate() + 7);
+            
+            const activePlans = AppState.plans.filter(p => getPlanExpiryDate(p) >= now);
+            const expiringSoon = activePlans.filter(p => getPlanExpiryDate(p) <= sevenDaysFromNow);
+            
+            DOMElements.statTotal.textContent = AppState.plans.length;
+            DOMElements.statActive.textContent = activePlans.length;
+            DOMElements.statExpiring.textContent = expiringSoon.length;
+
+            // NEW: Calculate and display total family cost from active plans
+            const totalDailyCost = activePlans.reduce((sum, plan) => {
+                const dailyCost = (plan.validity > 0) ? (plan.totalPrice / plan.validity) : 0;
+                return sum + dailyCost;
+            }, 0);
+
+            const totalMonthlyCost = totalDailyCost * 30;
+            DOMElements.statDailyCost.textContent = `₹${totalDailyCost.toFixed(2)}/day`;
+            DOMElements.statMonthlyCost.textContent = `₹${totalMonthlyCost.toFixed(2)}/mo`;
+        };
+
+        const saveAndRender = () => {
+            localStorage.setItem('ispRechargePlans_v3.6', JSON.stringify(AppState.plans));
+            sortPlans();
+            renderPlans();
+            updateDashboard();
+        };
+
+        const renderPlans = () => {
+            DOMElements.planList.innerHTML = '';
+            if (AppState.plans.length === 0) {
+                DOMElements.planList.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Click "Add New Plan" to get started!</td></tr>';
+                return;
+            }
+
+            AppState.plans.forEach(plan => {
+                const expiryDate = getPlanExpiryDate(plan);
+                const pricePerDay = (plan.validity > 0) ? (plan.totalPrice / plan.validity).toFixed(2) : 'N/A';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${expiryDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                    <td><b>${plan.ispName}</b></td>
+                    <td>${plan.validity} days</td>
+                    <td>₹${plan.totalPrice.toFixed(2)}</td>
+                    <td>₹${pricePerDay}</td>
+                    <td class="actions" style="display:flex; gap:0.5rem;">
+                        <button class="btn-action edit" title="Edit"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn-action delete" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                    </td>
+                `;
+                row.querySelector('.edit').addEventListener('click', () => showForm(true, plan));
+                row.querySelector('.delete').addEventListener('click', () => deletePlan(plan.id));
+                DOMElements.planList.appendChild(row);
+            });
+            updateSortHeaders();
+        };
+        
+        const sortPlans = () => {
+            const {key, direction} = AppState.sortConfig;
+            AppState.plans.sort((a,b) => {
+                let valA, valB;
+                if(key === 'expiresOn') {
+                    valA = getPlanExpiryDate(a); valB = getPlanExpiryDate(b);
+                } else {
+                    valA = a[key]; valB = b[key];
+                    if (typeof valA === 'string') { valA = valA.toLowerCase(); valB = valB.toLowerCase(); }
+                }
+                if (valA < valB) return direction === 'ascending' ? -1 : 1;
+                if (valA > valB) return direction === 'ascending' ? 1 : -1;
+                return 0;
+            });
+        };
+
+        const updateSortHeaders = () => {
+             document.querySelectorAll('th.sortable').forEach(header => {
+                header.classList.remove('sorted-asc', 'sorted-desc');
+                if (header.dataset.sort === AppState.sortConfig.key) {
+                    header.classList.add(`sorted-${AppState.sortConfig.direction === 'ascending' ? 'asc' : 'desc'}`);
+                }
+            });
+        }
+        
+        // --- Event Listeners ---
+        DOMElements.showFormBtn.addEventListener('click', () => showForm());
+        DOMElements.cancelBtn.addEventListener('click', hideForm);
+        DOMElements.planForm.addEventListener('submit', handleFormSubmit);
+        DOMElements.ispNameSelect.addEventListener('change', toggleOtherIspField);
+
+        document.querySelectorAll('th.sortable').forEach(header => {
+            header.addEventListener('click', () => {
+                const sortKey = header.dataset.sort;
+                AppState.sortConfig.key = sortKey;
+                AppState.sortConfig.direction = (AppState.sortConfig.direction === 'ascending' && AppState.sortConfig.key === sortKey) ? 'descending' : 'ascending';
+                saveAndRender();
+            });
+        });
+
+        // --- Initial Load ---
+        saveAndRender();
+    });
+</script>
+
+</body>
+</html>
